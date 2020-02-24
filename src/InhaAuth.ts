@@ -34,7 +34,7 @@ const findCookie = (headers: any, cookieName: string): string | null => headers[
   ?.match(/^[^=]+=([^;]*);/)[1]
   ?? null;
 
-export interface StudentInfo {
+interface StudentInfo {
   sid: string;
   name: string;
   college: string;
@@ -42,7 +42,7 @@ export interface StudentInfo {
   grade: string;
 }
 
-export class InhaAuth {
+export default class InhaAuth {
   /**
    * 학번
    */

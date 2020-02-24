@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    mocha: true,
     node: true,
   },
   extends: [
@@ -24,5 +23,14 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
+  },
+  rules: {
+    'import/extensions': ['error', 'ignorePackages', {
+      js: 'never',
+      jsx: 'never',
+      mjs: 'never',
+      ts: 'never',
+      tsx: 'never',
+    }],
   },
 };
