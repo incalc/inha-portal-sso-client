@@ -1,10 +1,14 @@
 import axios from 'axios';
 import InhaAuthError from './InhaAuthError';
 
+/** @ignore */
 const HTML_NAME_REGEX = /<font class=\\"name\\">(.+?)<\/font>/;
+/** @ignore */
 const HTML_MAJOR_LIST_REGEX = /<p class=\\"major-list\\">(.+?)<\/p>/g;
 
+/** @ignore */
 const SSO_URL = 'https://portal.inha.ac.kr/inha/SsoTokenService.do';
+/** @ignore */
 const INFO_URL = 'https://portal.inha.ac.kr/portalctnt/studPage!00015';
 
 Object.assign(axios.defaults, {
@@ -17,6 +21,7 @@ Object.assign(axios.defaults, {
 
 /**
  * 주어진 세션 아이디로 쿠키 헤더를 생성합니다.
+ * @ignore
  * @param sessionId 세션 아이디
  * @returns 세션 쿠키 헤더
  */
@@ -25,9 +30,11 @@ const createSessionHeader = (sessionId: string): { 'cookie': string } => ({
 });
 
 /**
- * Axios 헤더에서 쿠키 값을 찾아 반환합니다.
- * @param headers
- * @param cookieName
+ * 요청 헤더에서 쿠키 값을 찾아 반환합니다.
+ * @ignore
+ * @param headers 요청 헤더
+ * @param cookieName 쿠키 이름
+ * @returns 쿠키 값
  */
 const findCookie = (headers: any, cookieName: string): string | null => headers['set-cookie']
   ?.find((value: string) => value.includes(cookieName))
@@ -35,39 +42,37 @@ const findCookie = (headers: any, cookieName: string): string | null => headers[
   ?? null;
 
 interface StudentInfo {
+  /** 학번 */
   sid: string;
+  /** 이름 */
   name: string;
+  /** 단과대학명 */
   college: string;
+  /** 학과명 */
   department: string;
+  /** 학년 */
   grade: string;
 }
 
 export default class InhaAuth {
-  /**
-   * 학번
-   */
+  /** 학번 */
   private readonly sid: string;
 
-  /**
-   * 통합인증 서비스 로그인 세션 아이디
-   */
+  /** 통합인증 서비스 로그인 세션 아이디 */
   private readonly serviceSessionId: string;
 
-  /**
-   * 포털 메인 로그인 세션 아이디
-   */
+  /** 포털 메인 로그인 세션 아이디 */
   private readonly loginSessionId: string;
 
-  /**
-   * 한웨이(한진그룹 사내 그룹웨어 시스템) 쿠키
-   */
+  /** 한웨이(한진그룹 사내 그룹웨어 시스템) 쿠키 */
   private readonly hanwayCookie: string;
 
   /**
+   * 주어진 학번과 비밀번호로 로그인하고 클라이언트를 반환합니다.
    * @async
    * @param sid 학번
    * @param password 비밀번호
-   * @returns 클래스 인스턴스
+   * @returns 로그인 클라이언트
    */
   static async init(sid: string, password: string): Promise<InhaAuth> {
     const loginForm = `user_id=${encodeURIComponent(sid)}&user_password=${encodeURIComponent(password)}`;
