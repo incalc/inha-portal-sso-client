@@ -1,7 +1,7 @@
 {
   "name": "inha-portal-sso-client",
   "version": "0.1.0",
-  "description": "",
+  "description": "Inha Univ. Portal Single Sign-On Client",
   "keywords": [
     "inha-university",
     "single-sign-on",
@@ -15,8 +15,8 @@
   },
   "license": "MIT",
   "author": "Seungjae Park <astro.psj@gmail.com>",
-  "main": "dist/bundle.cjs.js",
-  "module": "dist/bundle.esm.js",
+  "main": "dist/lib.cjs.js",
+  "module": "dist/lib.esm.js",
   "types": "dist/index.d.ts",
   "directories": {
     "doc": "docs",
@@ -38,8 +38,8 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.20.0",
-    "@typescript-eslint/parser": "^2.20.0",
+    "@typescript-eslint/eslint-plugin": "^2.21.0",
+    "@typescript-eslint/parser": "^2.21.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
