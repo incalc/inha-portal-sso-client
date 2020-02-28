@@ -2411,10 +2411,17 @@ img {
 			</a>
 			<pre><code class="language-ts"><span class="hljs-keyword">import</span> { InhaAuth } <span class="hljs-keyword">from</span> <span class="hljs-string">'inha-portal-sso-client'</span>;
 
-<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">await</span> InhaAuth.init(<span class="hljs-string">'12191234'</span>, <span class="hljs-string">'P@ssw0rd!'</span>);
+<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">await</span> InhaAuth.init(<span class="hljs-string">'12191765'</span>, <span class="hljs-string">'P@ssw0rd!'</span>);
 <span class="hljs-keyword">const</span> info = <span class="hljs-keyword">await</span> client.getStudentInfo();
 
-<span class="hljs-built_in">console</span>.log(info);</code></pre>
+<span class="hljs-built_in">console</span>.log(info);
+<span class="hljs-comment">// {</span>
+<span class="hljs-comment">//   sid: '12191765',</span>
+<span class="hljs-comment">//   name: '박승재',</span>
+<span class="hljs-comment">//   college: '공과대학',</span>
+<span class="hljs-comment">//   department: '정보통신공학과',</span>
+<span class="hljs-comment">//   grade: '2학년(재학)'</span>
+<span class="hljs-comment">// }</span></code></pre>
 			<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 				<h2>License</h2>
 			</a>
