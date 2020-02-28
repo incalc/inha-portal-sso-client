@@ -38,10 +38,17 @@ See [API](https://incalc.github.io/inha-portal-sso-client/)
 ```ts
 import { InhaAuth } from 'inha-portal-sso-client';
 
-const client = await InhaAuth.init('12191234', 'P@ssw0rd!');
+const client = await InhaAuth.init('12191765', 'P@ssw0rd!');
 const info = await client.getStudentInfo();
 
 console.log(info);
+// {
+//   sid: '12191765',
+//   name: '박승재',
+//   college: '공과대학',
+//   department: '정보통신공학과',
+//   grade: '2학년(재학)'
+// }
 ```
 
 ## License
