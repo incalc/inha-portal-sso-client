@@ -19,8 +19,7 @@
   "module": "dist/lib.esm.js",
   "types": "dist/index.d.ts",
   "directories": {
-    "doc": "docs",
-    "lib": "lib"
+    "doc": "docs"
   },
   "repository": {
     "type": "git",
