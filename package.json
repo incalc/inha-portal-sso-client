@@ -9,9 +9,9 @@
     "client-library",
     "typescript"
   ],
-  "homepage": "https://github.com/Astro36/inha-portal-sso-client#readme",
+  "homepage": "https://github.com/incalc/inha-portal-sso-client#readme",
   "bugs": {
-    "url": "https://github.com/Astro36/inha-portal-sso-client/issues"
+    "url": "https://github.com/incalc/inha-portal-sso-client/issues"
   },
   "license": "MIT",
   "author": "Seungjae Park <astro.psj@gmail.com>",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Astro36/inha-portal-sso-client.git"
+    "url": "git+https://github.com/incalc/inha-portal-sso-client.git"
   },
   "scripts": {
     "build": "tsc --emitDeclarationOnly & rollup -c",
@@ -43,10 +43,10 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",
-    "rollup": "^1.31.1",
+    "rollup": "^1.32.0",
     "rollup-plugin-terser": "^5.2.0",
-    "tslib": "^1.11.0",
-    "typedoc": "^0.16.10",
+    "tslib": "^1.11.1",
+    "typedoc": "^0.16.11",
     "typescript": "^3.8.2"
   },
   "engines": {
