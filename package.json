@@ -17,6 +17,7 @@
   "author": "Seungjae Park <astro.psj@gmail.com>",
   "main": "dist/lib.cjs.js",
   "module": "dist/lib.esm.js",
+  "browser": "dist/lib.umd.js",
   "types": "dist/src/index.d.ts",
   "directories": {
     "doc": "docs"

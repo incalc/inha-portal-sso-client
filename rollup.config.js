@@ -16,6 +16,15 @@ export default {
       entryFileNames: path.basename(pkg.module),
       format: 'esm',
     },
+    {
+      name: 'inhaPortalSSO',
+      dir: './dist',
+      entryFileNames: path.basename(pkg.browser),
+      format: 'umd',
+      globals: {
+        axios: 'axios',
+      },
+    },
   ],
   external: [
     'axios',
