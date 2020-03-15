@@ -1,4 +1,5 @@
-import { terser } from "rollup-plugin-terser";
+import path from 'path';
+import { terser } from 'rollup-plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
 
@@ -6,11 +7,13 @@ export default {
   input: 'src/index.ts',
   output: [
     {
-      file: pkg.main,
+      dir: './dist',
+      entryFileNames: path.basename(pkg.main),
       format: 'cjs',
     },
     {
-      file: pkg.module,
+      dir: './dist',
+      entryFileNames: path.basename(pkg.module),
       format: 'esm',
     },
   ],
