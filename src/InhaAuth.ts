@@ -2,6 +2,9 @@ import axios from 'axios';
 import InhaAuthError from './InhaAuthError';
 
 /** @ignore */
+const TEXT_PASSWORD_ERROR = /비밀번호 (\d+)회 오류입니다/;
+
+/** @ignore */
 const HTML_NAME_REGEX = /<font class=\\"name\\">(.+?)<\/font>/;
 /** @ignore */
 const HTML_MAJOR_LIST_REGEX = /<p class=\\"major-list\\">(.+?)<\/p>/g;
@@ -77,6 +80,12 @@ export default class InhaAuth {
   static async init(sid: string, password: string): Promise<InhaAuth> {
     const loginForm = `user_id=${encodeURIComponent(sid)}&user_password=${encodeURIComponent(password)}`;
     const serviceResponse = await axios.post(SSO_URL, loginForm);
+    if (serviceResponse.status === 200) { // login fail
+      if (TEXT_PASSWORD_ERROR.test(serviceResponse.data)) {
+        const [, errorCount] = serviceResponse.data.match(TEXT_PASSWORD_ERROR);
+        throw new InhaAuthError(`SID or password is incorrect (error: ${errorCount})`);
+      }
+    }
     if (serviceResponse.status !== 302) {
       throw new InhaAuthError('Redirect Fail');
     }
@@ -143,7 +152,7 @@ export default class InhaAuth {
       headers: createSessionHeader(loginSessionId),
     });
     if (infoResponse.status !== 200) {
-      throw new InhaAuthError('Login Fail');
+      throw new InhaAuthError('Invalid login session');
     }
     const infoHtml = infoResponse.data;
     const [, name] = infoHtml.match(HTML_NAME_REGEX);
