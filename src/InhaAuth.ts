@@ -1,18 +1,11 @@
 import axios from 'axios';
+import {
+  SSO_URL, INFO_URL,
+  HTML_NAME_REGEX, HTML_MAJOR_LIST_REGEX, PASSWORD_ERROR_REGEX,
+} from './constants';
 import InhaAuthError from './InhaAuthError';
-
-/** @ignore */
-const TEXT_PASSWORD_ERROR = /비밀번호 (\d+)회 오류입니다/;
-
-/** @ignore */
-const HTML_NAME_REGEX = /<font class=\\"name\\">(.+?)<\/font>/;
-/** @ignore */
-const HTML_MAJOR_LIST_REGEX = /<p class=\\"major-list\\">(.+?)<\/p>/g;
-
-/** @ignore */
-const SSO_URL = 'https://portal.inha.ac.kr/inha/SsoTokenService.do';
-/** @ignore */
-const INFO_URL = 'https://portal.inha.ac.kr/portalctnt/studPage!00015';
+import { CookieReceivedHeader, RedirectHeader, StudentInfo } from './types';
+import { createSessionHeader, findCookieValueFromHeader } from './utils';
 
 Object.assign(axios.defaults, {
   headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -21,41 +14,6 @@ Object.assign(axios.defaults, {
   },
   maxRedirects: 0,
 });
-
-/**
- * 주어진 세션 아이디로 쿠키 헤더를 생성합니다.
- * @ignore
- * @param sessionId 세션 아이디
- * @returns 세션 쿠키 헤더
- */
-const createSessionHeader = (sessionId: string): { 'cookie': string } => ({
-  cookie: `JSESSIONID=${sessionId}`,
-});
-
-/**
- * 요청 헤더에서 쿠키 값을 찾아 반환합니다.
- * @ignore
- * @param headers 요청 헤더
- * @param cookieName 쿠키 이름
- * @returns 쿠키 값
- */
-const findCookie = (headers: any, cookieName: string): string | null => headers['set-cookie']
-  ?.find((value: string) => value.includes(cookieName))
-  ?.match(/^[^=]+=([^;]*);/)[1]
-  ?? null;
-
-interface StudentInfo {
-  /** 학번 */
-  sid: string;
-  /** 이름 */
-  name: string;
-  /** 단과대학명 */
-  college: string;
-  /** 학과명 */
-  department: string;
-  /** 학년 */
-  grade: string;
-}
 
 export default class InhaAuth {
   /** 학번 */
@@ -78,39 +36,48 @@ export default class InhaAuth {
    * @returns 로그인 클라이언트
    */
   static async init(sid: string, password: string): Promise<InhaAuth> {
+    type CredentialRedirectHeader = CookieReceivedHeader & RedirectHeader;
+
     const loginForm = `user_id=${encodeURIComponent(sid)}&user_password=${encodeURIComponent(password)}`;
-    const serviceResponse = await axios.post(SSO_URL, loginForm);
+
+    const serviceResponse = await axios.post<string>(SSO_URL, loginForm);
     if (serviceResponse.status === 200) { // login fail
-      if (TEXT_PASSWORD_ERROR.test(serviceResponse.data)) {
-        const [, errorCount] = serviceResponse.data.match(TEXT_PASSWORD_ERROR);
+      if (PASSWORD_ERROR_REGEX.test(serviceResponse.data)) {
+        const [, errorCount] = PASSWORD_ERROR_REGEX.exec(serviceResponse.data) as RegExpExecArray;
         throw new InhaAuthError(`SID or password is incorrect (error: ${errorCount})`);
       }
     }
     if (serviceResponse.status !== 302) {
       throw new InhaAuthError('Redirect Fail');
     }
-    const serviceSessionId = findCookie(serviceResponse.headers, 'JSESSIONID');
+    const serviceResponseHeaders = serviceResponse.headers as CredentialRedirectHeader;
+    const serviceSessionId = findCookieValueFromHeader(serviceResponseHeaders, 'JSESSIONID');
     if (!serviceSessionId) {
       throw new InhaAuthError('Service session ID is not found');
     }
-    const serviceRedirectUrl = serviceResponse.headers.location;
-    const federateResponse = await axios.get(serviceRedirectUrl);
+    const serviceRedirectUrl = serviceResponseHeaders.location;
+
+    const federateResponse = await axios.get<string>(serviceRedirectUrl);
     if (federateResponse.status !== 302) {
       throw new InhaAuthError('Redirect Fail');
     }
-    const federateRedirectUrl = federateResponse.headers.location;
-    const loginResponse = await axios.get(federateRedirectUrl, {
+    const federateResponseHeaders = federateResponse.headers as RedirectHeader;
+    const federateRedirectUrl = federateResponseHeaders.location;
+
+    const loginResponse = await axios.get<string>(federateRedirectUrl, {
       headers: createSessionHeader(serviceSessionId),
     });
     if (loginResponse.status !== 302) {
       throw new InhaAuthError('Redirect Fail');
     }
-    const loginSessionId = findCookie(loginResponse.headers, 'JSESSIONID');
+    const loginResponseHeaders = loginResponse.headers as CredentialRedirectHeader;
+    const loginSessionId = findCookieValueFromHeader(loginResponseHeaders, 'JSESSIONID');
     if (!loginSessionId) {
       throw new InhaAuthError('Login session ID is not found');
     }
-    const loginRedirectUrl = loginResponse.headers.location;
-    const portalResponse = await axios.get(loginRedirectUrl, {
+    const loginRedirectUrl = loginResponseHeaders.location;
+
+    const portalResponse = await axios.get<string>(loginRedirectUrl, {
       headers: createSessionHeader(loginSessionId),
       maxRedirects: 3,
     });
@@ -118,7 +85,7 @@ export default class InhaAuth {
       throw new InhaAuthError('Portal access is denied');
     }
     const portalHtml = portalResponse.data;
-    const [, hanwayCookie] = portalHtml.match(/https:\/\/portal\.inha\.ac\.kr\/setCookie\.jsp\?([^"]+)\s*"/);
+    const [, hanwayCookie] = /https:\/\/portal\.inha\.ac\.kr\/setCookie\.jsp\?([^"]+)\s*"/.exec(portalHtml) as RegExpExecArray;
     return new InhaAuth(sid, serviceSessionId, loginSessionId, hanwayCookie);
   }
 
@@ -148,14 +115,14 @@ export default class InhaAuth {
    */
   async getStudentInfo(): Promise<StudentInfo> {
     const { sid, loginSessionId } = this;
-    const infoResponse = await axios.get(INFO_URL, {
+    const infoResponse = await axios.get<string>(INFO_URL, {
       headers: createSessionHeader(loginSessionId),
     });
     if (infoResponse.status !== 200) {
       throw new InhaAuthError('Invalid login session');
     }
     const infoHtml = infoResponse.data;
-    const [, name] = infoHtml.match(HTML_NAME_REGEX);
+    const [, name] = HTML_NAME_REGEX.exec(infoHtml) as RegExpExecArray;
     const matchMap = (m: string[]): string => m[1];
     const majorList = Array.from(infoHtml.matchAll(HTML_MAJOR_LIST_REGEX), matchMap);
     const [college, department, grade] = majorList;
