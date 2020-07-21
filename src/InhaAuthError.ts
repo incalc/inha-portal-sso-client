@@ -1,3 +1,4 @@
+/** 인하대 포털 로그인 오류 클래스 */
 export default class InhaAuthError extends Error {
   constructor(message?: string) {
     super(message);

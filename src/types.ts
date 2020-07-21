@@ -1,13 +1,16 @@
+/** 쿠키 수신 헤더 */
 export interface CookieReceivedHeader {
-  'set-cookie': string[]
+  'set-cookie': string[];
 }
 
+/** 쿠키 전송 헤더 */
 export interface CookieSentHeader {
-  cookie: string
+  cookie: string;
 }
 
+/** 리다이렉트 헤더 */
 export interface RedirectHeader {
-  location: string,
+  location: string;
 }
 
 /** 학생 정보 */

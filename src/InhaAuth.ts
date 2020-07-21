@@ -15,6 +15,7 @@ Object.assign(axios.defaults, {
   maxRedirects: 0,
 });
 
+/** 인하대 포털 로그인 클래스 */
 export default class InhaAuth {
   /** 학번 */
   private readonly sid: string;
