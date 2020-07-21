@@ -2,7 +2,11 @@
 
 > Inha Univ. Portal Single Sign-On Client
 
-[![NPM](https://img.shields.io/npm/v/inha-portal-sso-client?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/inha-portal-sso-client) [![NODE](https://img.shields.io/node/v/inha-portal-sso-client?style=for-the-badge&logo=node.js)](https://nodejs.org) [![DOWNLOADS](https://img.shields.io/npm/dt/inha-portal-sso-client?style=for-the-badge)](https://www.npmjs.com/package/inha-portal-sso-client) [![LICENSE](https://img.shields.io/npm/l/inha-portal-sso-client?style=for-the-badge)](./LICENSE)
+[![NPM](https://img.shields.io/npm/v/inha-portal-sso-client?logo=npm&logoColor=white&style=for-the-badge)](https://www.npmjs.com/package/inha-portal-sso-client)
+[![Node.js](https://img.shields.io/node/v/inha-portal-sso-client?logo=node.js&logoColor=white&style=for-the-badge)](https://nodejs.org)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/incalc/inha-portal-sso-client/Node.js?logo=github&logoColor=white&style=for-the-badge)](https://github.com/incalc/inha-portal-sso-client/actions)
+[![Downloads](https://img.shields.io/npm/dt/inha-portal-sso-client?logo=npm&logoColor=white&style=for-the-badge)](https://www.npmjs.com/package/inha-portal-sso-client)
+[![License](https://img.shields.io/npm/l/inha-portal-sso-client?style=for-the-badge)](./LICENSE)
 
 ## ChangeLog
 

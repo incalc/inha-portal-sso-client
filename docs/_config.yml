@@ -1,2 +1,0 @@
-include:
-  - "*.html" # Needed to include files that start with underscore

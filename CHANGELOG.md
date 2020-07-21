@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.1.2
+
+Released Jul 21, 2020
+
+### Changed
+
+- Refactor code and add more type declarations.
+
+### Security
+
+- Update security vulnerability found dependency.
+
 ## v0.1.1
 
 Released Mar 15, 2020
