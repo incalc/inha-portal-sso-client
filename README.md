@@ -8,6 +8,8 @@
 [![Downloads](https://img.shields.io/npm/dt/inha-portal-sso-client?logo=npm&logoColor=white&style=for-the-badge)](https://www.npmjs.com/package/inha-portal-sso-client)
 [![License](https://img.shields.io/npm/l/inha-portal-sso-client?style=for-the-badge)](./LICENSE)
 
+> **NOTE: This library is not working now because of [Inha Univ. Portal site](https://portal.inha.ac.kr/) UI update.**
+
 ## ChangeLog
 
 See [CHANGELOG](./CHANGELOG.md)
